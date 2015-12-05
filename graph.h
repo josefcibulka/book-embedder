@@ -7,6 +7,8 @@
  * Author: Josef Cibulka
  * License: see the file LICENSE
  */
+#ifndef BOOK_EMBEDDER_GRAPH_H_
+#define BOOK_EMBEDDER_GRAPH_H_
 
 #include <cassert>
 #include <cstdio>
@@ -104,3 +106,5 @@ class Graph
     }
   }
 };
+
+#endif

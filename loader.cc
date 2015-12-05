@@ -14,7 +14,7 @@
 #include <string>
 #include <stdexcept>
 
-#include "graph.h"
+#include "loader.h"
 
 using std::string;
 using std::istream;
@@ -37,7 +37,7 @@ class NoMoreLinesException : public std::runtime_error
  * Throws NoMoreLinesException when end of file reached and runtime_error in case of
  * a failure while reading from input.
  */
-string mygetline(istream &input)
+string Loader::mygetline(istream &input)
 {
   bool line_read = false;
   string line;
@@ -60,7 +60,7 @@ string mygetline(istream &input)
  * The number may be preceded only by whitespace on the line. The rest of the line after the number is ignored.
  * Throws runtime_error in case of an error.
  */
-int mygetnumber(istream &input)
+int Loader::mygetnumber(istream &input)
 {
   string line = mygetline(input);
   istringstream istr(line);
@@ -76,7 +76,7 @@ int mygetnumber(istream &input)
  * The rest of the line after the numbers is ignored.
  * Throws runtime_error in case of an error.
  */
-Edge mygetedge(istream &input)
+Edge Loader::mygetedge(istream &input)
 {
   string line = mygetline(input);
   istringstream istr(line);
@@ -91,9 +91,9 @@ Edge mygetedge(istream &input)
 
 /**
  * Load gr from input. Original contents of gr (if any) are removed.
- * The given ordering of vertices and the initial assignment of edges is ignored.
+ * The given ordering of vertices and the initial assignment of edges to pages is ignored.
  */
-void load(istream &input, Graph *gr)
+void Loader::load(istream &input, Graph *gr)
 {
   int n = mygetnumber(input);
 

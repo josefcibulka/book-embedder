@@ -7,9 +7,25 @@
  * Author: Josef Cibulka
  * License: see the file LICENSE
  */
+#ifndef BOOK_EMBEDDER_LOADER_H_
+#define BOOK_EMBEDDER_LOADER_H_
 
 #include <istream>
 
-class Graph;
+#include "graph.h"
 
-void load(std::istream &input, Graph *gr);
+class Loader
+{
+ public:
+  static void load(std::istream &input, Graph *gr);
+
+ private:
+  static std::string mygetline(std::istream &input);
+
+  static int mygetnumber(std::istream &input);
+
+  static Edge mygetedge(std::istream &input);
+
+};
+
+#endif
