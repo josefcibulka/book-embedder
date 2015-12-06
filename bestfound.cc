@@ -66,20 +66,36 @@ void BestFound::verifyGraph(const Graph &gr, int claimedCr)
   }
 }
 
+/**
+ * @param claimedCr The claimed crossing number of the candidate (it is also verified here). Value of -1 means that it should be counted here.
+ *
+ */
 void BestFound::testIfBest(const Graph &candidate, int claimedCr)
 {
-  if (claimedCr >= val_)
+  if (claimedCr == -1)
+    claimedCr = Tools::countCrossingNumber(candidate);
+
+  if (val_ != -1 && claimedCr >= val_)
+    return;
+
+  val_ = claimedCr;
+  gr_.loadFrom(candidate);
+  betterThanInitial_ = true;
+
+  if (filename_ == "")
     return;
 
   verifyGraph(candidate, claimedCr);
-  val_ = claimedCr;
-  gr_.loadFrom(candidate);
 
-  cerr << "Writing graph with: " << claimedCr << " crossings." << endl;
+  cout << "Writing graph with: " << claimedCr << " crossings.  \r";
+  cout.flush();
+  // make a backup
+  std::remove(filenameBck_.c_str());
+  std::rename(filename_.c_str(), filenameBck_.c_str());
+  // write the graph
   std::ofstream ostr;
   ostr.open(filename_.c_str(), std::ios_base::out);
   if (!ostr.is_open())
     return;
   writeGraph(candidate, ostr);
-  ostr.close();
 }

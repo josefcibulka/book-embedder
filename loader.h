@@ -10,6 +10,7 @@
 #ifndef BOOK_EMBEDDER_LOADER_H_
 #define BOOK_EMBEDDER_LOADER_H_
 
+#include <vector>
 #include <istream>
 
 #include "graph.h"
@@ -24,7 +25,7 @@ class Loader
 
   static int mygetnumber(std::istream &input);
 
-  static Edge mygetedge(std::istream &input);
+  static Edge mygetedge(std::istream &input, std::vector<int> &whereIsVertex);
 
 };
 

@@ -21,9 +21,10 @@ class Edge
   int v1, v2;  ///< The current positions of the endpoints (may differ from the vertex ids)
   int p = 0;  ///< The page, where the edge currently is (numbering starts at 0)
   int cr = 0;  ///< Number of crossings. Used only sometimes.
-  Edge(int v1_in, int v2_in)
+  Edge(int v1_in, int v2_in, int p_in)
       : v1(v1_in),
-        v2(v2_in)
+        v2(v2_in),
+        p(p_in)
   {
   }
   int getOtherEnd(int va) const
@@ -79,7 +80,7 @@ class Graph
         v(orig.v),
         e(orig.e)
   {
-    updateNeighs();
+    restoreNeighs();
   }
 
   Graph& operator=(const Graph& other) = delete;
@@ -89,13 +90,13 @@ class Graph
     p = other.p;
     v = other.v;
     e = other.e;
-    updateNeighs();
+    restoreNeighs();
   }
 
   /**
    * Fills the neighs in all the vertices based on the information in edges.
    */
-  void updateNeighs()
+  void restoreNeighs()
   {
     for (Vertex &ver : v)
       ver.neighs.clear();

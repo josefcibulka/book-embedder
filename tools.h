@@ -16,13 +16,15 @@ class Tools
 
   static int countCrossingNumber(const Graph &gr);
 
-  static int countEdgesFromNeighborsCrossings(const Graph &gr, int v1);
+  static int countCrossingsOfEdgesFromNeighbors(const Graph &gr, int v1);
 
-  static int removeEdgesVertexCrossings(const Graph &gr, int v1, std::vector<Edge> &eList);
+  static int countCrossingChangeIfNeighborsSwapped(const Graph &gr, int v1);
 
-  static int addEdgesVertexCrossings(const Graph &gr, int v1, std::vector<Edge> &eList);
+  static void removeEdgesVertexCrossings(const Graph &gr, int v1, std::vector<Edge> &eList);
 
-  static int addEdgesGraphCrossings(const Graph &gr, std::vector<Edge> &eList);
+  static void addEdgesVertexCrossings(const Graph &gr, int v1, std::vector<Edge> &eList);
+
+  static void countEdgesGraphCrossings(const Graph &gr, std::vector<Edge> &eList);
 
   static void moveVertex(Graph *gr, int vOld, int vNew);
 
@@ -36,14 +38,12 @@ class Tools
 
   static int findBestPositionForVertex(const Graph &gr, int origPos, int *finalPos);
 
-  static void BaurBrandes(Graph *gr);
-
   static void lenPages(Graph *gr);
 
   static int restartEdges(Graph *gr, int prevCr, void (*placer)(Graph *gr));
 
  private:
-  static int countEdgesVertexCrossingsImpl(const Graph &gr, int v1, std::vector<Edge> &eList,
+  static void countEdgesVertexCrossingsImpl(const Graph &gr, int v1, std::vector<Edge> &eList,
                                     int factor);
 };
 

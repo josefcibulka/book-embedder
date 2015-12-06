@@ -11,15 +11,16 @@
 
 #include "graph.h"
 
-#define MY_HUGE 1000000000
-
 class BestFound
 {
  public:
   BestFound(std::string filename, Graph &origGr)
       : filename_(filename),
+        filenameBck_(filename + ".bck"),
         origGr_(origGr)
   {
+    testIfBest(origGr, -1);
+    betterThanInitial_ = false; // must be here, because testIfBest changes it to true
   }
 
   void testIfBest(const Graph &candidate, int claimedCr);
@@ -29,11 +30,29 @@ class BestFound
     return val_;
   }
 
+  const Graph &gr() const
+  {
+    return gr_;
+  }
+
+  bool betterThanInitial() const
+  {
+    return betterThanInitial_;
+  }
+
+  void restart()
+  {
+    val_ = -1;
+    betterThanInitial_ = false;
+  }
+
  private:
   std::string filename_ = "";
-  int val_ = MY_HUGE;
+  std::string filenameBck_ = "";
+  int val_ = -1;
   Graph gr_;
   Graph origGr_;
+  bool betterThanInitial_ = false;
 
   void writeGraph(const Graph &g, std::ostream &ostr);
 

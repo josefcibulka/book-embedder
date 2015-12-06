@@ -15,8 +15,10 @@
 #include <stdexcept>
 
 #include "loader.h"
+#include "tools.h"
 
 using std::string;
+using std::vector;
 using std::istream;
 using std::istringstream;
 using std::cout;
@@ -76,7 +78,7 @@ int Loader::mygetnumber(istream &input)
  * The rest of the line after the numbers is ignored.
  * Throws runtime_error in case of an error.
  */
-Edge Loader::mygetedge(istream &input)
+Edge Loader::mygetedge(istream &input, vector<int> &whereIsVertex)
 {
   string line = mygetline(input);
   istringstream istr(line);
@@ -84,14 +86,24 @@ Edge Loader::mygetedge(istream &input)
   istr >> v1;
   int v2;
   istr >> v2;
+  char c;
+  istr >> c;
+  if (c != '[')
+    throw std::runtime_error(
+        "Failed to parse " + line + " as an Edge: missing \'[\'");
+  int page;
+  istr >> page;
+  istr >> c;
+  if (c != ']')
+    throw std::runtime_error(
+        "Failed to parse " + line + " as an Edge: missing \']\'");
   if (istr.fail())
     throw std::runtime_error("Failed to parse " + line + " as an Edge.");
-  return Edge(v1, v2);
+  return Edge(whereIsVertex[v1], whereIsVertex[v2], page);
 }
 
 /**
  * Load gr from input. Original contents of gr (if any) are removed.
- * The given ordering of vertices and the initial assignment of edges to pages is ignored.
  */
 void Loader::load(istream &input, Graph *gr)
 {
@@ -104,15 +116,19 @@ void Loader::load(istream &input, Graph *gr)
 
   gr->p = mygetnumber(input);
 
+  std::vector<int> whereIsVertex(n, -1);
   for (int i = 0; i < n; i++)
-    mygetnumber(input);  // ignore the initial ordering
+  {
+    int id = mygetnumber(input);
+    whereIsVertex[id] = i;
+  }
 
   // Read edges up to the end of the file.
   while (true)
   {
     try
     {
-      gr->e.push_back(mygetedge(input));
+      gr->e.push_back(mygetedge(input, whereIsVertex));
     }
     catch (NoMoreLinesException &exc)
     {
@@ -123,8 +139,9 @@ void Loader::load(istream &input, Graph *gr)
       throw;
     }
   }
-  cerr << gr->e.size() << endl;
+  cout << "Loaded graph with " << gr->v.size() << " vertices and "
+       << gr->e.size() << " edges." << endl;
 
   // Set the pointers to edges now, when the vector of all edges is filled and will not be moved.
-  gr->updateNeighs();
+  gr->restoreNeighs();
 }

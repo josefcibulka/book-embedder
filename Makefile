@@ -13,6 +13,9 @@ clean:
 	rm -rf *.o $(MAIN)
 
 solver.o: solver.cc $(HEADERS)
+bestfound.o: bestfound.cc $(HEADERS)
+loader.o: loader.cc $(HEADERS)
+tools.o: tools.cc $(HEADERS)
 
 gen_complete: gen_complete.o
 gen_complete_tpartite: gen_complete_tpartite.o
